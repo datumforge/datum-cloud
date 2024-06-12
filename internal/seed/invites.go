@@ -68,6 +68,8 @@ func getRole() string {
 // if the file does not exist, it will return a random emails instead
 func getUserEmails(filename string, numUsers int) ([]string, error) {
 	emails := []string{}
+
+	// if the file does not exist, generate random emails
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
 		for range numUsers {
 			emails = append(emails, gofakeit.Email())
@@ -76,33 +78,22 @@ func getUserEmails(filename string, numUsers int) ([]string, error) {
 		return emails, nil
 	}
 
-	file, err := os.Open(filename)
+	// get the emails from the file
+	records, err := readCSVFile(filename)
 	if err != nil {
 		return nil, err
 	}
-
-	defer file.Close()
-
-	reader := csv.NewReader(file)
-	records, err := reader.ReadAll()
-	if err != nil {
-		return nil, err
-	}
-
-	headerRow := records[0]
 
 	// find the email column
-	emailIndex := -1
-	for i, header := range headerRow {
-		if header == "Email" {
-			emailIndex = i
-			break
-		}
+	emailIndex := getColumnIndex(records[0], "Email")
+	if emailIndex == -1 {
+		return nil, fmt.Errorf("%w: %s", ErrColumnNotFound, "Email")
 	}
 
 	// make sure we don't go out of bounds
 	userCount := len(records) - 1
 	generateAdditionalUsers := 0
+
 	if numUsers > userCount {
 		generateAdditionalUsers = numUsers - userCount
 	}
