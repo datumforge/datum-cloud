@@ -10,9 +10,10 @@ import (
 	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 
+	"github.com/datumforge/datum/pkg/datumclient"
+
 	datumcloud "github.com/datumforge/datum-cloud/cmd"
 	"github.com/datumforge/datum-cloud/internal/seed"
-	"github.com/datumforge/datum/pkg/datumclient"
 )
 
 var seedInitCmd = &cobra.Command{
