@@ -9,6 +9,7 @@ import (
 
 var (
 	defaultObjectCount = 10
+	defaultInviteCount = 5
 )
 
 var seedGenerateCmd = &cobra.Command{
@@ -25,7 +26,7 @@ func init() {
 	seedGenerateCmd.Flags().StringP("directory", "d", "demodata", "directory to save generated data")
 	seedGenerateCmd.Flags().Int("users", defaultObjectCount, "number of users to generate")
 	seedGenerateCmd.Flags().Int("groups", defaultObjectCount, "approximate number of groups to generate")
-	seedGenerateCmd.Flags().Int("invites", defaultObjectCount, "number of invites to generate")
+	seedGenerateCmd.Flags().Int("invites", defaultInviteCount, "number of invites to generate")
 }
 
 func generate() error {

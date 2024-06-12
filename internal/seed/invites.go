@@ -38,8 +38,13 @@ func (c *Config) generateInviteData() error {
 	}
 
 	// Add data
-	for i := 0; i < c.NumInvites; i++ {
-		if err := csvWriter.Write([]string{gofakeit.Email(), getRole()}); err != nil {
+	emails, err := getUserEmails(c.getUserFilePath(), c.NumInvites)
+	if err != nil {
+		return err
+	}
+
+	for _, email := range emails {
+		if err := csvWriter.Write([]string{email, getRole()}); err != nil {
 			return err
 		}
 	}
@@ -57,4 +62,61 @@ var (
 // getRole returns a random role from the validRoles slice
 func getRole() string {
 	return validRoles[rand.Intn(len(validRoles))] //nolint:gosec
+}
+
+// getUserEmail returns a subset of user emails from the users.csv file
+// if the file does not exist, it will return a random emails instead
+func getUserEmails(filename string, numUsers int) ([]string, error) {
+	emails := []string{}
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		for range numUsers {
+			emails = append(emails, gofakeit.Email())
+		}
+
+		return emails, nil
+	}
+
+	file, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+	records, err := reader.ReadAll()
+	if err != nil {
+		return nil, err
+	}
+
+	headerRow := records[0]
+
+	// find the email column
+	emailIndex := -1
+	for i, header := range headerRow {
+		if header == "Email" {
+			emailIndex = i
+			break
+		}
+	}
+
+	// make sure we don't go out of bounds
+	userCount := len(records) - 1
+	generateAdditionalUsers := 0
+	if numUsers > userCount {
+		generateAdditionalUsers = numUsers - userCount
+	}
+
+	// grab the first userCount emails
+	records = records[1 : userCount+1]
+	for _, record := range records {
+		emails = append(emails, record[emailIndex])
+	}
+
+	// generate additional users if needed
+	for range generateAdditionalUsers {
+		emails = append(emails, gofakeit.Email())
+	}
+
+	return emails, nil
 }

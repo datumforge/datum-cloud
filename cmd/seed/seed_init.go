@@ -40,7 +40,7 @@ func initSeedData(ctx context.Context) error {
 		cobra.CheckErr("PAT ID not provided")
 	}
 
-	c, err := datumcloud.NewSeedClient()
+	c, err := newSeedClient()
 	cobra.CheckErr(err)
 
 	bar := progressbar.NewOptions(100, //nolint:mnd
@@ -166,4 +166,24 @@ func getAllData(ctx context.Context, c *seed.Client) error {
 	createTableOutput("Invites", header, rows)
 
 	return nil
+}
+
+// newSeedClient creates a new datum Seed client, requiring a token to be set
+func newSeedClient() (*seed.Client, error) {
+	conf, err := seed.NewDefaultConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	if datumcloud.Config.String("directory") != "" {
+		conf.Directory = datumcloud.Config.String("directory")
+	}
+
+	if datumcloud.Config.String("token") == "" {
+		return nil, datumcloud.ErrDatumAPITokenMissing
+	}
+
+	conf.Token = datumcloud.Config.String("token")
+
+	return conf.NewClient()
 }
