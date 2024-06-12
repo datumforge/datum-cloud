@@ -1,4 +1,4 @@
-// Package datumcloud is our cobra/viper cli implementation
+// Package datumcloud is our cobra cli implementation
 package datumcloud
 
 import (
