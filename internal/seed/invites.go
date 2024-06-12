@@ -98,8 +98,10 @@ func getUserEmails(filename string, numUsers int) ([]string, error) {
 		generateAdditionalUsers = numUsers - userCount
 	}
 
+	userEmails := min(numUsers, userCount)
+
 	// grab the first userCount emails
-	records = records[1 : userCount+1]
+	records = records[1 : userEmails+1]
 	for _, record := range records {
 		emails = append(emails, record[emailIndex])
 	}

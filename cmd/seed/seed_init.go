@@ -12,6 +12,7 @@ import (
 
 	datumcloud "github.com/datumforge/datum-cloud/cmd"
 	"github.com/datumforge/datum-cloud/internal/seed"
+	"github.com/datumforge/datum/pkg/datumclient"
 )
 
 var seedInitCmd = &cobra.Command{
@@ -106,6 +107,12 @@ func initSeedData(ctx context.Context) error {
 	err = c.LoadInvites(ctx)
 	cobra.CheckErr(err)
 
+	bar.Describe("[light_green]>[reset] creating subscribers...")
+	datumcloud.BarAdd(bar, 10) //nolint:mnd
+
+	err = c.LoadSubscribers(ctx)
+	cobra.CheckErr(err)
+
 	bar.Describe("[light_green]>[reset] seeded environment created")
 	err = bar.Finish()
 	cobra.CheckErr(err)
@@ -161,6 +168,19 @@ func getAllData(ctx context.Context, c *seed.Client) error {
 
 	for _, invite := range invites.Invites.Edges {
 		rows = append(rows, []interface{}{invite.Node.ID, invite.Node.Recipient, invite.Node.Role, invite.Node.Status})
+	}
+
+	createTableOutput("Invites", header, rows)
+
+	where := &datumclient.SubscriberWhereInput{}
+	subscribers, err := c.Subscribers(ctx, where)
+	cobra.CheckErr(err)
+
+	header = table.Row{"ID", "Email", "Active", "Verified"}
+	rows = []table.Row{}
+
+	for _, sub := range subscribers.Subscribers.Edges {
+		rows = append(rows, []interface{}{sub.Node.ID, sub.Node.Email, sub.Node.Active, sub.Node.VerifiedEmail})
 	}
 
 	createTableOutput("Invites", header, rows)

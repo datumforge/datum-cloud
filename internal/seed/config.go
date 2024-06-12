@@ -18,6 +18,8 @@ type Config struct {
 	NumGroups int `json:"NumGroups" koanf:"NumGroups" default:"10"`
 	// NumInvites is the number of invites to generate
 	NumInvites int `json:"NumInvites" koanf:"NumInvites" default:"5"`
+	// NumSubscribers is the number of subscribers to generate
+	NumSubscribers int `json:"NumSubscribers" koanf:"NumSubscribers" default:"30"`
 }
 
 // NewDefaultConfig returns a new Config with default values

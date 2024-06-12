@@ -8,8 +8,9 @@ import (
 )
 
 var (
-	defaultObjectCount = 10
-	defaultInviteCount = 5
+	defaultObjectCount     = 10
+	defaultInviteCount     = 5
+	defaultSubscriberCount = 30
 )
 
 var seedGenerateCmd = &cobra.Command{
@@ -27,6 +28,8 @@ func init() {
 	seedGenerateCmd.Flags().Int("users", defaultObjectCount, "number of users to generate")
 	seedGenerateCmd.Flags().Int("groups", defaultObjectCount, "approximate number of groups to generate")
 	seedGenerateCmd.Flags().Int("invites", defaultInviteCount, "number of invites to generate")
+	seedGenerateCmd.Flags().Int("subscribers", defaultSubscriberCount, "number of subscribers to generate")
+
 }
 
 func generate() error {
@@ -40,6 +43,7 @@ func generate() error {
 	config.NumUsers = datumcloud.Config.Int("users")
 	config.NumGroups = datumcloud.Config.Int("groups")
 	config.NumInvites = datumcloud.Config.Int("invites")
+	config.NumSubscribers = datumcloud.Config.Int("subscribers")
 
 	return config.GenerateData()
 }

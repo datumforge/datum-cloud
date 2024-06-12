@@ -157,6 +157,22 @@ func (c *Client) LoadInvites(ctx context.Context) error {
 	return nil
 }
 
+// LoadSubscribers loads the subscribers from the subscribers.csv file
+func (c *Client) LoadSubscribers(ctx context.Context) error {
+	file := c.config.getSubscriberFilePath()
+
+	upload, err := loadCSVFile(file)
+	if err != nil {
+		return err
+	}
+
+	if _, err := c.CreateBulkCSVSubscriber(ctx, upload); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // RegisterUsers registers the users from the users.csv file
 func (c *Client) RegisterUsers(ctx context.Context) error {
 	file := c.config.getUserFilePath()
