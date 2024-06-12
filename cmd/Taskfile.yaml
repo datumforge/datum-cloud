@@ -1,0 +1,62 @@
+version: "3"
+
+
+env:
+  DATUMCLOUD_HOST: http://localhost:17608
+  PAT_FILE: pat.env
+
+tasks:
+  generate:
+    desc: generate a new set of seed data
+    cmds:
+      - go run main.go seed generate
+
+  init:
+    desc: initialize the new seed data
+    dotenv: ['{{.PAT_FILE}}']
+    cmds:
+      - go run main.go seed init
+
+  seed:
+    desc: create a new seeded environment
+    cmds:
+      - task: generate
+      - task: init
+
+  install:datum:
+    desc: install the datum-cli
+    cmds:
+      - brew install datumforge/tap/datum
+
+  register:
+    desc: a task to register a user, parse out the token response, and submit it to the verify endpoint
+    cmds:
+      - curl {{.DATUM_HOST}}/v1/verify?token={{.VERIFY_TOKEN}}
+    vars:
+      DATUM_HOST: $DATUMCLOUD_HOST
+      VERIFY_TOKEN:
+        sh: ../datum/datum-cli register --email="datum-cloud@datum.net" --first-name="datum" --last-name="cloud" --password="mitbcloud1234" | jq -r .token
+
+  login:
+    desc: a task to login the verified user
+    env:
+      DATUM_PASSWORD: mitbcloud1234
+    cmds:
+      - ../datum/datum-cli login -u datum-cloud@datum.net
+
+  pat:create:
+    desc: a task to create a personal access token
+    vars:
+      PERSONAL_ORG:
+        sh: ../datum/datum-cli user get -z json | jq -r .users.edges.[0].node.setting.defaultOrg.id
+    cmds:
+      - touch {{.PAT_FILE}}
+      - ../datum/datum-cli pat create --name="datum-cloud-demo-env" --description="datum-cloud" -o {{.PERSONAL_ORG}} | jq -r '"DATUMCLOUD_PATID=\(.createPersonalAccessToken.personalAccessToken.id)\nDATUMCLOUD_TOKEN=\(.createPersonalAccessToken.personalAccessToken.token)"' > {{.PAT_FILE}}
+      - export $(awk -F= '{output=output" "$1"="$2} END {print output}' {{.PAT_FILE}})
+
+  all:
+    desc: runs all tasks to create a new seeded environment
+    cmds:
+      - task: login
+      - task: pat:create
+      - task: seed
