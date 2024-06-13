@@ -51,7 +51,18 @@ Available Commands:
 
 ### Getting Started
 
-Included in this repo is a [Taskfile](cmd/Taskfile.yaml) that makes the process quick. On a brand new database, you should run:
+Included in this repo is a [Taskfile](cmd/Taskfile.yaml) that makes the process quick. If you haven't used `task` before, head over to the upstream [docs](https://taskfile.dev/) to [install](https://taskfile.dev/installation/).
+
+#### Prerequisites
+
+1. Before running any of the cli commands you will need to install any dependencies
+    ```bash
+    task cli:install
+    ```
+
+#### Using the Taskfile
+
+On a brand new database, you should run:
 
 1. Create a new user to authenticate with the Datum API, this command will fail on subsequent tries because the user will already exist.
     ```bash
