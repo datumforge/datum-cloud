@@ -14,7 +14,7 @@ require (
 	github.com/knadh/koanf/v2 v2.1.1
 	github.com/mcuadros/go-defaults v1.2.0
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/schollz/progressbar/v3 v3.14.3
+	github.com/schollz/progressbar/v3 v3.14.4
 	github.com/spf13/cobra v1.8.0
 	github.com/test-go/testify v1.1.4
 	go.uber.org/zap v1.27.0
