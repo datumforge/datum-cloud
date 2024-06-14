@@ -3,7 +3,7 @@ module github.com/datumforge/datum-cloud
 go 1.22.4
 
 require (
-	github.com/99designs/gqlgen v0.17.48
+	github.com/99designs/gqlgen v0.17.49
 	github.com/brianvoe/gofakeit/v7 v7.0.3
 	github.com/datumforge/datum v0.6.1
 	github.com/jedib0t/go-pretty/v6 v6.5.9
@@ -71,7 +71,7 @@ require (
 	github.com/stretchr/testify v1.9.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
-	github.com/vektah/gqlparser/v2 v2.5.15 // indirect
+	github.com/vektah/gqlparser/v2 v2.5.16 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/zclconf/go-cty v1.14.4 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
