@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/brianvoe/gofakeit/v7"
 )
@@ -38,7 +39,9 @@ func (c *Config) generateSubscriberData() error {
 
 	// Add data
 	for range c.NumSubscribers {
-		if err := csvWriter.Write([]string{gofakeit.Email()}); err != nil {
+		p := gofakeit.Person()
+
+		if err := csvWriter.Write([]string{fmt.Sprintf("%s.%s@example.com", strings.ToLower(p.FirstName), strings.ToLower(p.LastName))}); err != nil {
 			return err
 		}
 	}

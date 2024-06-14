@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/brianvoe/gofakeit/v7"
 )
@@ -32,7 +33,7 @@ func (c *Config) generateUserData() error {
 	csvWriter := csv.NewWriter(file)
 
 	// Add column headers
-	headers := []string{"First Name", "Last Name", "Email", "Password", "AuthProvider", "OrganizationIDs"}
+	headers := []string{"First Name", "Last Name", "Email", "Password", "AuthProvider", "OrganizationIDs", "Verified"}
 	if err := csvWriter.Write(headers); err != nil {
 		return err
 	}
@@ -60,10 +61,18 @@ func generateUserDetails() []string {
 	return []string{
 		p.FirstName,
 		p.LastName,
-		p.Contact.Email,
+		fmt.Sprintf("%s.%s@example.com", strings.ToLower(p.FirstName), strings.ToLower(p.LastName)),
 		// there is not guarantee that the password will have special characters, so we add one to ensure
 		fmt.Sprintf("%s!", gofakeit.Password(true, true, true, true, false, passwordLength)),
 		"CREDENTIALS",
 		"[ORGANIZATION_ID]",
+		getVerified(),
 	}
+}
+
+// getVerified returns a random value for the Verified field (of true or false)
+func getVerified() string {
+	possibleValues := []string{"true", "false"}
+
+	return possibleValues[gofakeit.Number(0, 1)]
 }

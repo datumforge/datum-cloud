@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/csv"
 	"fmt"
+	"net/url"
 	"time"
 
 	"github.com/datumforge/datum/pkg/datumclient"
@@ -54,6 +55,13 @@ func (c *Config) createClient() (*datumclient.DatumClient, error) {
 	}
 
 	config := datumclient.NewDefaultConfig()
+
+	var err error
+
+	config.BaseURL, err = url.Parse(c.DatumHost)
+	if err != nil {
+		return nil, err
+	}
 
 	opt := datumclient.WithCredentials(datumclient.Authorization{
 		BearerToken: c.Token})
@@ -198,8 +206,22 @@ func (c *Client) RegisterUsers(ctx context.Context) error {
 			LastName:  record[1],
 		}
 
-		if _, err := c.Register(ctx, &req); err != nil {
+		reply, err := c.Register(ctx, &req)
+		if err != nil {
 			return err
+		}
+
+		if record[6] == "true" {
+			// sleep for a 100ms to avoid rate limiting
+			time.Sleep(100 * time.Millisecond) // nolint:mnd
+
+			// verify the user - this will probably break in the future when we stop
+			// returning the token in the register response
+			if _, err := c.VerifyEmail(ctx, &models.VerifyRequest{
+				Token: reply.Token,
+			}); err != nil {
+				return err
+			}
 		}
 	}
 
