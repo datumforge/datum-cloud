@@ -1,0 +1,51 @@
+version: "3"
+
+env:
+
+includes:
+  cli:
+    taskfile: ./cmd/Taskfile.yaml
+
+tasks:
+  ## Go tasks
+  go:lint:
+    desc: runs golangci-lint, the most annoying opinionated linter ever
+    cmds:
+      - golangci-lint run --config=.golangci.yaml --verbose --fast
+
+  go:test:
+    desc: runs and outputs results of created go tests
+    cmds:
+      - go test -v ./...
+
+  go:test:cover:
+    desc: runs and outputs results of created go tests with coverage
+    aliases: [cover]
+    cmds:
+      - go test -v ./... -coverprofile=coverage.out
+      - go tool cover -html=coverage.out
+
+  go:fmt:
+    desc: format all go code
+    cmds:
+      - go fmt ./...
+
+  go:tidy:
+    desc: Runs go mod tidy on the backend
+    aliases: [tidy]
+    cmds:
+      - go mod tidy
+
+  go:build:
+    desc: Runs go build for the datum-cloud cli
+    cmds:
+      - go build -mod=mod -o datum-cloud
+
+  go:all:
+    aliases: [go]
+    desc: Runs all go test and lint related tasks
+    cmds:
+      - task: go:tidy
+      - task: go:fmt
+      - task: go:lint
+      - task: go:test

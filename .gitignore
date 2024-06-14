@@ -19,3 +19,24 @@
 
 # Go workspace file
 go.work
+
+# Editor files
+.vscode
+
+# OS Generated Files
+.DS_Store*
+.AppleDouble
+.LSOverride
+ehthumbs.db
+Icon?
+Thumbs.db
+
+## Seed data files
+demodata/*
+pat.env
+
+# Configs
+*.env
+*.env-dev
+*.config.yaml
+.task
