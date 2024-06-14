@@ -184,7 +184,7 @@ func getAllData(ctx context.Context, c *seed.Client) error {
 		rows = append(rows, []interface{}{sub.Node.ID, sub.Node.Email, sub.Node.Active, sub.Node.VerifiedEmail})
 	}
 
-	createTableOutput("Invites", header, rows)
+	createTableOutput("Subscribers", header, rows)
 
 	return nil
 }
@@ -203,6 +203,8 @@ func newSeedClient() (*seed.Client, error) {
 	if datumcloud.Config.String("token") == "" {
 		return nil, datumcloud.ErrDatumAPITokenMissing
 	}
+
+	conf.DatumHost = datumcloud.DatumHost
 
 	conf.Token = datumcloud.Config.String("token")
 

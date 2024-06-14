@@ -8,6 +8,8 @@ import (
 type Config struct {
 	// Directory is the directory to save generated data
 	Directory string `json:"directory" koanf:"directory" default:"demodata"`
+	// DatumHost is the host of the datum server
+	DatumHost string `json:"datumHost" koanf:"datum" default:"http://localhost:17608"`
 	// Token is the token to use for the datum client
 	Token string `json:"token" koanf:"token" default:""`
 	// NumOrganizations is the number of organizations to generate
