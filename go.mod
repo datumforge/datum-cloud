@@ -5,7 +5,7 @@ go 1.22.4
 require (
 	github.com/99designs/gqlgen v0.17.49
 	github.com/brianvoe/gofakeit/v7 v7.0.3
-	github.com/datumforge/datum v0.6.4
+	github.com/datumforge/datum v0.6.5
 	github.com/jedib0t/go-pretty/v6 v6.5.9
 	github.com/knadh/koanf/parsers/yaml v0.1.0
 	github.com/knadh/koanf/providers/env v0.1.0
@@ -76,7 +76,7 @@ require (
 	github.com/zclconf/go-cty v1.14.4 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
-	golang.org/x/exp v0.0.0-20240604190554-fc45aab8b7f8 // indirect
+	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8 // indirect
 	golang.org/x/mod v0.18.0 // indirect
 	golang.org/x/oauth2 v0.21.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
