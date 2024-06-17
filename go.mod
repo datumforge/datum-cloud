@@ -5,7 +5,7 @@ go 1.22.4
 require (
 	github.com/99designs/gqlgen v0.17.49
 	github.com/brianvoe/gofakeit/v7 v7.0.3
-	github.com/datumforge/datum v0.6.5
+	github.com/datumforge/datum v0.6.6
 	github.com/jedib0t/go-pretty/v6 v6.5.9
 	github.com/knadh/koanf/parsers/yaml v0.1.0
 	github.com/knadh/koanf/providers/env v0.1.0
