@@ -1,9 +1,6 @@
 version: "3"
 
-
 env:
-  DATUMCLOUD_DATUM_HOST: http://localhost:17608
-  DATUM_HOST: http://localhost:17608
   PAT_FILE: pat.env
 
 tasks:

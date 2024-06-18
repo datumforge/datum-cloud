@@ -30,6 +30,10 @@ func New(config Config, opts ...ClientOption) (_ Client, err error) {
 
 	// apply the options to the client
 	for _, opt := range opts {
+		if opt == nil {
+			continue
+		}
+
 		if err := opt(c); err != nil {
 			return nil, err
 		}

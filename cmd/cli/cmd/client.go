@@ -20,9 +20,9 @@ func SetupClient(ctx context.Context, host string) (client.Client, error) {
 }
 
 // configureClientEndpoints will setup the base URL for the datum client
-func configureClientEndpoints(datumCloudHost string) (opt client.ClientOption, err error) {
+func configureClientEndpoints(datumCloudHost string) (client.ClientOption, error) {
 	if datumCloudHost == "" {
-		return
+		return nil, nil
 	}
 
 	baseURL, err := url.Parse(datumCloudHost)
