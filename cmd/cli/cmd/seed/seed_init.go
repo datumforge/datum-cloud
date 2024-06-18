@@ -196,15 +196,17 @@ func newSeedClient() (*seed.Client, error) {
 		return nil, err
 	}
 
-	if datumcloud.Config.String("directory") != "" {
-		conf.Directory = datumcloud.Config.String("directory")
-	}
-
 	if datumcloud.Config.String("token") == "" {
 		return nil, datumcloud.ErrDatumAPITokenMissing
 	}
 
-	conf.DatumHost = datumcloud.DatumHost
+	if datumcloud.Config.String("directory") != "" {
+		conf.Directory = datumcloud.Config.String("directory")
+	}
+
+	if datumcloud.Config.String("datum-host") != "" {
+		conf.DatumHost = datumcloud.Config.String("datum-host")
+	}
 
 	conf.Token = datumcloud.Config.String("token")
 
