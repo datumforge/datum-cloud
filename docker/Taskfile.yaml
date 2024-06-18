@@ -1,0 +1,9 @@
+version: "3"
+
+tasks:
+  build:
+    dir: ..
+    desc: builds the datum-cloud docker image
+    cmds:
+      - "docker build -f docker/Dockerfile . -t datum-cloud:dev"
+

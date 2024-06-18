@@ -4,7 +4,12 @@ env:
 
 includes:
   cli:
-    taskfile: ./cmd/Taskfile.yaml
+    taskfile: ./cmd/cli/Taskfile.yaml
+  config:
+    taskfile: ./jsonschema/Taskfile.yaml
+  docker:
+    taskfile: ./docker/Taskfile.yaml
+    dir: ./docker
 
 tasks:
   ## Go tasks
@@ -36,10 +41,10 @@ tasks:
     cmds:
       - go mod tidy
 
-  go:build:
+  go:build-cli:
     desc: Runs go build for the datum-cloud cli
     cmds:
-      - go build -mod=mod -o datum-cloud
+      - go build -mod=mod -o datum-cloud-cli ./cmd/cli
 
   go:all:
     aliases: [go]
@@ -49,3 +54,53 @@ tasks:
       - task: go:fmt
       - task: go:lint
       - task: go:test
+
+  install:datum:
+    desc: install the datum-cli
+    aliases: [install]
+    cmds:
+      - brew install datumforge/tap/datum
+
+  register:
+    desc: a task to register a user, parse out the token response, and submit it to the verify endpoint
+    cmds:
+      - curl {{.DATUM_HOST}}/v1/verify?token={{.VERIFY_TOKEN}}
+    vars:
+      DATUM_HOST: $DATUMCLOUD_HOST
+      VERIFY_TOKEN:
+        sh: datum register --email="datum-cloud@datum.net" --first-name="datum" --last-name="cloud" --password="mitbcloud1234" | jq -r .token
+
+  login:
+    desc: a task to login the verified user
+    env:
+      DATUM_PASSWORD: mitbcloud1234
+    cmds:
+      - datum login -u datum-cloud@datum.net
+
+  pat:create:
+    desc: a task to create a personal access token and export it to the environment
+    vars:
+      PERSONAL_ORG:
+        sh: datum user get -z json | jq -r .users.edges.[0].node.setting.defaultOrg.id
+    cmds:
+      - touch {{.PAT_FILE}}
+      - datum pat create --name="datum-cloud-demo-env" --description="datum-cloud" -o {{.PERSONAL_ORG}} | jq -r '"DATUMCLOUD_PATID=\(.createPersonalAccessToken.personalAccessToken.id)\nDATUMCLOUD_SERVER_DATUM_TOKEN=\(.createPersonalAccessToken.personalAccessToken.token)\nDATUMCLOUD_TOKEN=\(.createPersonalAccessToken.personalAccessToken.token)"' > {{.PAT_FILE}}
+      - export $(awk -F= '{output=output" "$1"="$2} END {print output}' {{.PAT_FILE}})
+
+  setup-dev:
+    desc: login and create a DATUM pat for the dev environment
+    cmds:
+      - task: login
+      - task: pat:create
+
+  run:
+    dotenv: ['{{.PAT_FILE}}']
+    desc: runs the datum-cloud server in dev mode
+    cmds:
+      - go run main.go serve --debug --pretty
+
+  run-dev:
+    desc: runs the datum-cloud server in dev mode
+    cmds:
+      - task: setup-dev
+      - task: run
