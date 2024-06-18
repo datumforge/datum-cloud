@@ -8,10 +8,10 @@ import (
 )
 
 // SetupClient will setup the datum cloud client
-func SetupClient(ctx context.Context) (client.Client, error) {
+func SetupClient(ctx context.Context, host string) (client.Client, error) {
 	config := client.NewDefaultConfig()
 
-	opt, err := configureClientEndpoints()
+	opt, err := configureClientEndpoints(host)
 	if err != nil {
 		return nil, err
 	}
@@ -20,8 +20,12 @@ func SetupClient(ctx context.Context) (client.Client, error) {
 }
 
 // configureClientEndpoints will setup the base URL for the datum client
-func configureClientEndpoints() (client.ClientOption, error) {
-	baseURL, err := url.Parse(DatumCloudHost)
+func configureClientEndpoints(datumCloudHost string) (client.ClientOption, error) {
+	if datumCloudHost == "" {
+		return nil, nil
+	}
+
+	baseURL, err := url.Parse(datumCloudHost)
 	if err != nil {
 		return nil, err
 	}

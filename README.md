@@ -9,41 +9,29 @@ Building a SaaS offering on top of [Datum](https://github.com/datumforge/datum)
 
 ## Datum Cloud Server
 
-### Getting Started
+The Datum Cloud server is used to consume the [Datum Server](https://github.com/datumforge/datum/) and apply an opinionated implementation on top of the the generics provided. Many, if not all, of the endpoints provided by the server use the [Datum Client](https://github.com/datumforge/datum/blob/main/pkg/datumclient/client.go#L21) to make requests to the Datum Server.
 
-Starting the server, you can use the cli to bring up the local server. This will create a token to authenticate to the datum-api and startup the server:
-
-```bash
-task run-dev
-```
-
-You can then use the cli to do things like, create a new workspace:
-
-```bash
-task cli:workspace:create
-```
-
-<details>
-<summary>Workspace Creation</summary>
+As an example, the `v1/workspaces` endpoint uses the `Datum` client to create an organizational hierarchy, called a `Workspace`:
 
 ```
-task cli:workspace:create
-
-task: [cli:workspace:create] go run cmd/cli/main.go workspace create
-Name: mitb
-Description (optional): Description (optional): █
-Domains (optional): datum.net
-👉 Production & Testing
-Environments:  [production testing]
-
-> creating workspaces... 100% [===============]  [1s]
-ID:  01J0M42YRA021QCM060505XD47
-Name:  mitb
-Domains:  datum.net
+│   └── rootorg <--- top level organization
+│       ├── production <-- top level environment per customer organization
+│       │   ├── assets <-- buckets
+│       │   ├── customers
+│       │   ├── orders
+│       │   ├── relationships
+│       │   │   ├── internal_users  <-- relationships
+│       │   │   ├── marketing_subscribers
+│       │   │   ├── marketplaces
+│       │   │   ├── partners
+│       │   │   └── vendors
+│       │   └── sales
+│       └── test <-- organization identical to production just named
 ```
-</details>
 
 ## Datum Cloud CLI
+
+The Datum Cloud cli is used to interact with the Datum Cloud Server as well as some requests directly to the Datum Server using the [Datum Client](https://github.com/datumforge/datum/blob/main/pkg/datumclient/client.go#L21). In order to use the cli, you must have a registered user with the Datum Server.
 
 ### Installation
 
@@ -85,17 +73,6 @@ Available Commands:
   generate    generate random data for seeded environment
   init        init a new datum seeded environment
 ```
-
-### Getting Started
-
-Included in this repo is a [Taskfile](cmd/Taskfile.yaml) that makes the process quick. If you haven't used `task` before, head over to the upstream [docs](https://taskfile.dev/) to [install](https://taskfile.dev/installation/).
-
-#### Prerequisites
-
-1. Before running any of the cli commands you will need to install any dependencies
-    ```bash
-    task install
-    ```
 
 #### Using the Taskfile
 

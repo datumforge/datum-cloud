@@ -53,9 +53,12 @@ func (c *Config) newDatumClient() (*datumclient.DatumClient, error) {
 
 	var err error
 
-	config.BaseURL, err = url.Parse(c.DatumHost)
-	if err != nil {
-		return nil, err
+	// if the datum host is set, use it, otherwise use the default from the config
+	if c.DatumHost != "" {
+		config.BaseURL, err = url.Parse(c.DatumHost)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	opt := datumclient.WithCredentials(datumclient.Authorization{

@@ -18,10 +18,7 @@ import (
 )
 
 const (
-	appName        = "datum-cloud"
-	datumHost      = "http://localhost:17608" // dev
-	datumCloudHost = "http://localhost:17610" // dev
-	graphEndpoint  = "query"
+	appName = "datum-cloud"
 )
 
 var (
@@ -29,13 +26,6 @@ var (
 	OutputFormat string
 	Logger       *zap.SugaredLogger
 	Config       *koanf.Koanf
-)
-
-var (
-	// DatumHost contains the root url for the Datum API
-	DatumHost string
-	// DatumCloudHost contains the root url for the Datum Cloud API
-	DatumCloudHost string
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -59,8 +49,8 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/."+appName+".yaml)")
-	RootCmd.PersistentFlags().String("host", datumCloudHost, "datum cloud api url")
-	RootCmd.PersistentFlags().String("datum-host", datumHost, "datum api url")
+	RootCmd.PersistentFlags().String("host", "", "datum cloud api url, if not set the config default will be used")
+	RootCmd.PersistentFlags().String("datum-host", "", "datum api url, if not set the config default will be used")
 
 	// Auth flags
 	RootCmd.Flags().String("token", "", "datum api token")
@@ -83,10 +73,6 @@ func initConfig() {
 
 	// reload because flags and env vars take precedence over file
 	initConfiguration(RootCmd)
-
-	// set the host url
-	DatumHost = Config.String("datum-host")
-	DatumCloudHost = Config.String("host")
 
 	// setup logging configuration
 	setupLogging()

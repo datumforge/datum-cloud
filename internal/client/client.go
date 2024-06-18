@@ -28,6 +28,17 @@ func New(config Config, opts ...ClientOption) (_ Client, err error) {
 		Config: config,
 	}
 
+	// apply the options to the client
+	for _, opt := range opts {
+		if opt == nil {
+			continue
+		}
+
+		if err := opt(c); err != nil {
+			return nil, err
+		}
+	}
+
 	// create the HTTP sling client if it is not set
 	if c.HTTPSlingClient == nil {
 		c.HTTPSlingClient, err = newHTTPClient(c.Config)

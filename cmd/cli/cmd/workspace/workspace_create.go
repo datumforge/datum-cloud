@@ -33,7 +33,7 @@ func init() {
 }
 
 func createWorkspace(ctx context.Context) error {
-	c, err := datumcloud.SetupClient(ctx)
+	c, err := datumcloud.SetupClient(ctx, datumcloud.Config.String("host"))
 	cobra.CheckErr(err)
 
 	// check if interactive flag is set, if it is, and some params are not set, prompt user for input
