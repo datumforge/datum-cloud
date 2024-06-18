@@ -7,6 +7,42 @@
 
 Building a SaaS offering on top of [Datum](https://github.com/datumforge/datum)
 
+## Datum Cloud Server
+
+### Getting Started
+
+Starting the server, you can use the cli to bring up the local server. This will create a token to authenticate to the datum-api and startup the server:
+
+```bash
+task run-dev
+```
+
+You can then use the cli to do things like, create a new workspace:
+
+```bash
+task cli:workspace:create
+```
+
+<details>
+<summary>Workspace Creation</summary>
+
+```
+task cli:workspace:create
+
+task: [cli:workspace:create] go run cmd/cli/main.go workspace create
+Name: mitb
+Description (optional): Description (optional): █
+Domains (optional): datum.net
+👉 Production & Testing
+Environments:  [production testing]
+
+> creating workspaces... 100% [===============]  [1s]
+ID:  01J0M42YRA021QCM060505XD47
+Name:  mitb
+Domains:  datum.net
+```
+</details>
+
 ## Datum Cloud CLI
 
 ### Installation
@@ -34,6 +70,7 @@ Available Commands:
   completion  Generate the autocompletion script for the specified shell
   help        Help about any command
   seed        the subcommands for creating demo data in datum
+  workspace   the subcommands for working with the datum workspace
 ```
 
 ## Seeding Data
@@ -57,7 +94,7 @@ Included in this repo is a [Taskfile](cmd/Taskfile.yaml) that makes the process 
 
 1. Before running any of the cli commands you will need to install any dependencies
     ```bash
-    task cli:install
+    task install
     ```
 
 #### Using the Taskfile
@@ -66,11 +103,11 @@ On a brand new database, you should run:
 
 1. Create a new user to authenticate with the Datum API, this command will fail on subsequent tries because the user will already exist.
     ```bash
-    task cli:register
+    task register
     ```
 1. Login as the user, create a new Personal Access Token that will be used to seed the data, generate a new data set, bulk load objects into the Datum API:
     ```bash
-    task cli:all
+    task cli:seed:all
     ```
 
 If instead, you prefer to use the CLI commands directly, keep reading.
@@ -102,7 +139,7 @@ demodata
 Using the `init` subcommand, the data in the specified directory (defaults to `demodata` in the current directory), the csv files will be used to generate the data.
 
 ```bash
-datum-cloud  seed init
+datum-cloud seed init
 ```
 
 The newly created objects will be displayed when complete:

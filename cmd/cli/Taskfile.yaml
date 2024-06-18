@@ -1,0 +1,37 @@
+version: "3"
+
+
+env:
+  DATUMCLOUD_DATUM_HOST: http://localhost:17608
+  DATUM_HOST: http://localhost:17608
+  PAT_FILE: pat.env
+
+tasks:
+  generate:
+    desc: generate a new set of seed data
+    cmds:
+      - go run cmd/cli/main.go seed generate
+
+  init:
+    desc: initialize the new seed data
+    dotenv: ['{{.PAT_FILE}}']
+    cmds:
+      - go run cmd/cli/main.go seed init
+
+  seed:
+    desc: create a new seeded environment
+    cmds:
+      - task: generate
+      - task: init
+
+  seed:all:
+    desc: runs all tasks to create a new seeded environment
+    cmds:
+      - task: :login
+      - task: :pat:create
+      - task: seed
+
+  workspace:create:
+    desc: create a new workspace
+    cmds:
+      - go run cmd/cli/main.go workspace create

@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . -}}-config
+  {{ $labels := include "common.tplvalues.merge" (dict "values" ( list .Values.api.commonLabels (include "common.labels.standard" .) ) "context" . ) }}
+  labels: {{- include "common.tplvalues.render" ( dict "value" $labels "context" $) | nindent 4 }}
+  {{- if .Values.api.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.api.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
+data:
+  DATUMCLOUD_REFRESH_INTERVAL: {{ .Values.datumcloud.refresh_interval | default "10m" }}
+  DATUMCLOUD_SERVER_DEBUG: {{ .Values.datumcloud.server.debug | default false }}
+  DATUMCLOUD_SERVER_DEV: {{ .Values.datumcloud.server.dev | default false }}
+  DATUMCLOUD_SERVER_LISTEN: {{ .Values.datumcloud.server.listen | default ":17610" }}
+  DATUMCLOUD_SERVER_SHUTDOWN_GRACE_PERIOD: {{ .Values.datumcloud.server.shutdown_grace_period | default "10s" }}
+  DATUMCLOUD_SERVER_READ_TIMEOUT: {{ .Values.datumcloud.server.read_timeout | default "15s" }}
+  DATUMCLOUD_SERVER_WRITE_TIMEOUT: {{ .Values.datumcloud.server.write_timeout | default "15s" }}
+  DATUMCLOUD_SERVER_IDLE_TIMEOUT: {{ .Values.datumcloud.server.idle_timeout | default "30s" }}
+  DATUMCLOUD_SERVER_READ_HEADER_TIMEOUT: {{ .Values.datumcloud.server.read_header_timeout | default "2s" }}
+  DATUMCLOUD_SERVER_TLS_ENABLED: {{ .Values.datumcloud.server.tls.enabled | default false }}
+  DATUMCLOUD_SERVER_TLS_CERT_FILE: {{ .Values.datumcloud.server.tls.cert_file | default "server.crt" }}
+  DATUMCLOUD_SERVER_TLS_CERT_KEY: {{ .Values.datumcloud.server.tls.cert_key | default "server.key" }}
+  DATUMCLOUD_SERVER_TLS_AUTO_CERT: {{ .Values.datumcloud.server.tls.auto_cert | default false }}
+  DATUMCLOUD_SERVER_CORS_ALLOW_ORIGINS: {{ .Values.datumcloud.server.cors.allow_origins }}
+  DATUMCLOUD_SERVER_CORS_COOKIE_INSECURE: {{ .Values.datumcloud.server.cors.cookie_insecure }}
+  DATUMCLOUD_SERVER_DATUM_TOKEN: {{ .Values.datumcloud.server.datum.token }}
+  DATUMCLOUD_TRACER_ENABLED: {{ .Values.datumcloud.tracer.enabled | default false }}
+  DATUMCLOUD_TRACER_PROVIDER: {{ .Values.datumcloud.tracer.provider | default "stdout" }}
+  DATUMCLOUD_TRACER_ENVIRONMENT: {{ .Values.datumcloud.tracer.environment | default "development" }}
+  DATUMCLOUD_TRACER_STDOUT_PRETTY: {{ .Values.datumcloud.tracer.stdout.pretty | default true }}
+  DATUMCLOUD_TRACER_STDOUT_DISABLETIMESTAMP: {{ .Values.datumcloud.tracer.stdout.disableTimestamp | default false }}
+  DATUMCLOUD_TRACER_OTLP_ENDPOINT: {{ .Values.datumcloud.tracer.otlp.endpoint | default "localhost:4317" }}
+  DATUMCLOUD_TRACER_OTLP_INSECURE: {{ .Values.datumcloud.tracer.otlp.insecure | default true }}
+  DATUMCLOUD_TRACER_OTLP_CERTIFICATE: {{ .Values.datumcloud.tracer.otlp.certificate }}
+  DATUMCLOUD_TRACER_OTLP_HEADERS: {{ .Values.datumcloud.tracer.otlp.headers }}
+  DATUMCLOUD_TRACER_OTLP_COMPRESSION: {{ .Values.datumcloud.tracer.otlp.compression }}
+  DATUMCLOUD_TRACER_OTLP_TIMEOUT: {{ .Values.datumcloud.tracer.otlp.timeout | default "10s" }}
+  DATUMCLOUD_RATELIMIT_ENABLED: {{ .Values.datumcloud.ratelimit.enabled | default false }}
+  DATUMCLOUD_RATELIMIT_LIMIT: {{ .Values.datumcloud.ratelimit.limit | default 10 }}
+  DATUMCLOUD_RATELIMIT_BURST: {{ .Values.datumcloud.ratelimit.burst | default 30 }}
+  DATUMCLOUD_RATELIMIT_EXPIRES: {{ .Values.datumcloud.ratelimit.expires | default "10m" }}

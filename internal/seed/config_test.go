@@ -3,8 +3,8 @@ package seed_test
 import (
 	"testing"
 
-	"github.com/test-go/testify/assert"
-	"github.com/test-go/testify/require"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/datumforge/datum-cloud/internal/seed"
 )

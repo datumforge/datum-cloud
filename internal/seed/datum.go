@@ -24,7 +24,7 @@ func NewDefaultClient() (*Client, error) {
 		return nil, err
 	}
 
-	datumClient, err := config.createClient()
+	datumClient, err := config.newDatumClient()
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func NewDefaultClient() (*Client, error) {
 
 // NewClient creates a new datum client using the provided configuration variables
 func (c *Config) NewClient() (*Client, error) {
-	datumClient, err := c.createClient()
+	datumClient, err := c.newDatumClient()
 	if err != nil {
 		return nil, err
 	}
@@ -48,12 +48,7 @@ func (c *Config) NewClient() (*Client, error) {
 	}, nil
 }
 
-// CreateDatumClient creates a new datum client using the DATUM_TOKEN configuration variable
-func (c *Config) createClient() (*datumclient.DatumClient, error) {
-	if c.Token == "" {
-		return nil, ErrAPITokenMissing
-	}
-
+func (c *Config) newDatumClient() (*datumclient.DatumClient, error) {
 	config := datumclient.NewDefaultConfig()
 
 	var err error
@@ -103,7 +98,7 @@ func (c *Client) GenerateSeedAPIToken(ctx context.Context, orgID string) error {
 	c.config.Token = token.CreateAPIToken.APIToken.Token
 
 	// create a new client with the new token
-	c.DatumClient, err = c.config.createClient()
+	c.DatumClient, err = c.config.newDatumClient()
 	if err != nil {
 		return err
 	}

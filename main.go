@@ -1,11 +1,10 @@
+// package main is the entry point
 package main
 
 import (
-	datumcloud "github.com/datumforge/datum-cloud/cmd"
-
-	_ "github.com/datumforge/datum-cloud/cmd/seed"
+	"github.com/datumforge/datum-cloud/cmd"
 )
 
 func main() {
-	datumcloud.Execute()
+	cmd.Execute()
 }

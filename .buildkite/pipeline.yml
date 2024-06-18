@@ -3,6 +3,18 @@ env:
   IMAGE_REPO: ghcr.io/datumforge/${APP_NAME}
   SONAR_HOST: "https://sonarcloud.io"
 steps:
+  - group: ":knife: Pre-check"
+    key: "precheck"
+    steps:
+      - label: ":yaml: generate config"
+        key: "generate_config"
+        cancel_on_build_failing: true
+        plugins:
+          - docker#v5.11.0:
+              image: "ghcr.io/datumforge/base-ci-image:v1.1.6"
+              command: ["task", "config:ci"]
+              environment:
+                - "GOTOOLCHAIN=auto"
   - group: ":test_tube: Tests"
     key: "tests"
     steps:
@@ -69,6 +81,16 @@ steps:
   - group: ":golang: Builds"
     key: "go-builds"
     steps:
+      - label: ":golang: build"
+        key: "gobuild-server"
+        artifact_paths: "bin/${APP_NAME}"
+        plugins:
+          - docker#v5.11.0:
+              image: "golang:1.22.4"
+              environment:
+                - CGO_ENABLED=0
+                - GOOS=linux
+              command: ["go", "build", "-buildvcs=false", "-mod=mod", "-a", "-o", "bin/$APP_NAME"]
       - label: ":terminal: build cli"
         key: "gobuild-cli"
         artifact_paths: "bin/${APP_NAME}"
@@ -79,3 +101,83 @@ steps:
                 - GOOS=darwin
                 - GOARCH=arm64
               command: ["go", "build", "-buildvcs=false", "-mod=mod", "-a", "-o", "bin/${APP_NAME}", "."]
+  - group: ":docker: Image Build"
+    depends_on: "go-builds"
+    key: "image-build"
+    steps:
+      - label: ":docker: docker pr build"
+        key: "docker-pr-build"
+        cancel_on_build_failing: true
+        if: build.branch != "main" && build.tag == null
+        commands: |
+          #!/bin/bash
+          ls
+        plugins:
+          - datumforge/docker-metadata#v1.0.0:
+              images:
+                - "${IMAGE_REPO}"
+              extra_tags:
+                - "${IMAGE_TAG}"
+          - datumforge/container-build#v1.1.0:
+              dockerfile: docker/Dockerfile
+              push: false
+              build-args:
+                - NAME=${APP_NAME}
+          - equinixmetal-buildkite/trivy#v1.18.5:
+              severity: CRITICAL,HIGH
+              ignore-unfixed: true
+              security-checks: config,secret,vuln
+              skip-files: "cosign.key,Dockerfile.dev"
+      - label: ":docker: docker build and publish"
+        key: "docker-build"
+        cancel_on_build_failing: true
+        if: build.branch == "main"
+        commands: |
+          #!/bin/bash
+          ls
+        plugins:
+          - docker-login#v3.0.0:
+              username: datum-bender
+              password-env: SECRET_GHCR_PUBLISH_TOKEN
+              server: ghcr.io
+          - datumforge/docker-metadata#v1.0.0:
+              images:
+                - "${IMAGE_REPO}"
+              extra_tags:
+                - "${IMAGE_TAG}"
+          - datumforge/container-build#v1.1.0:
+              dockerfile: docker/Dockerfile
+              push: true
+              build-args:
+                - NAME=${APP_NAME}
+          - equinixmetal-buildkite/trivy#v1.18.5:
+              severity: CRITICAL,HIGH
+              ignore-unfixed: true
+              security-checks: config,secret,vuln
+              skip-files: "cosign.key,Dockerfile.dev"
+      - label: ":docker: docker build and publish"
+        key: "docker-build-and-tag"
+        if: build.tag != null
+        commands: |
+          #!/bin/bash
+          ls
+        plugins:
+          - docker-login#v3.0.0:
+              username: datum-bender
+              password-env: SECRET_GHCR_PUBLISH_TOKEN
+              server: ghcr.io
+          - datumforge/docker-metadata#v1.0.0:
+              images:
+                - "${IMAGE_REPO}"
+              extra_tags:
+                - "${BUILDKITE_TAG}"
+          - datumforge/container-build#v1.1.0:
+              dockerfile: docker/Dockerfile
+              push: true
+              build-args:
+                - NAME=${APP_NAME}
+          - equinixmetal-buildkite/trivy#v1.18.5:
+              severity: CRITICAL,HIGH
+              ignore-unfixed: true
+              security-checks: config,secret,vuln
+              skip-files: "cosign.key,Dockerfile.dev"

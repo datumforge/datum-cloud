@@ -2,7 +2,7 @@ project_name: datum-cloud
 builds:
   - env:
       - GO111MODULE=on
-      - CGO_ENABLED=1
+      - CGO_ENABLED=0
     flags:
       - -trimpath
       - -tags=netgo

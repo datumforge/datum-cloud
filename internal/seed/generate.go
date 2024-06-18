@@ -32,9 +32,5 @@ func (c *Config) GenerateData() error {
 	}
 
 	// Generate the subscriber data
-	if err := c.generateSubscriberData(); err != nil {
-		return err
-	}
-
-	return nil
+	return c.generateSubscriberData()
 }
