@@ -31,7 +31,8 @@
         }
       },
       "additionalProperties": false,
-      "type": "object"
+      "type": "object",
+      "description": "Datum settings for the server to authenticate with the datum server"
     },
     "config.Server": {
       "properties": {

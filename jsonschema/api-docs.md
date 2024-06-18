@@ -33,7 +33,7 @@ Server settings for the echo server
 |**read\_header\_timeout**|`integer`|ReadHeaderTimeout sets the amount of time allowed to read request headers<br/>|no|
 |[**tls**](#servertls)|`object`|TLS settings for the server for secure connections<br/>|no|
 |[**cors**](#servercors)|`object`|CORS settings for the server to allow cross origin requests<br/>|no|
-|[**datum**](#serverdatum)|`object`||no|
+|[**datum**](#serverdatum)|`object`|Datum settings for the server to authenticate with the datum server<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="servertls"></a>
@@ -74,6 +74,9 @@ CORS settings for the server to allow cross origin requests
 **Item Type:** `string`  
 <a name="serverdatum"></a>
 ### server\.datum: object
+
+Datum settings for the server to authenticate with the datum server
+
 
 **Properties**
 
