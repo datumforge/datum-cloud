@@ -22,7 +22,7 @@ tasks:
     desc: installs all dependencies for the project
     aliases: [install]
     cmds:
-      # - task: go:dist
+      - task: go:dist
       - task: brew-install
       - task: local-setup
 

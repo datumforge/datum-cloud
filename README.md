@@ -9,7 +9,7 @@ Building a SaaS offering on top of [Datum](https://github.com/datumforge/datum)
 
 ## Datum Cloud Server
 
-The Datum Cloud server is used to consume the [Datum Server](https://github.com/datumforge/datum/) and apply an opinionated implementation on top of the the generics provided. Many, it not all, of the endpoints provided by the server use the [Datum Client](https://github.com/datumforge/datum/blob/main/pkg/datumclient/client.go#L21) to make requests to the Datum Server.
+The Datum Cloud server is used to consume the [Datum Server](https://github.com/datumforge/datum/) and apply an opinionated implementation on top of the the generics provided. Many, if not all, of the endpoints provided by the server use the [Datum Client](https://github.com/datumforge/datum/blob/main/pkg/datumclient/client.go#L21) to make requests to the Datum Server.
 
 As an example, the `v1/workspaces` endpoint uses the `Datum` client to create an organizational hierarchy, called a `Workspace`:
 
@@ -31,7 +31,7 @@ As an example, the `v1/workspaces` endpoint uses the `Datum` client to create an
 
 ## Datum Cloud CLI
 
-The Datum Cloud cli is used to interact with the Datum Cloud Server as well as some requests directly to the Datum Server using the [Datum Client](https://github.com/datumforge/datum/blob/main/pkg/datumclient/client.go#L21). In order to use the cli, you must have a registered using with the Datum Server.
+The Datum Cloud cli is used to interact with the Datum Cloud Server as well as some requests directly to the Datum Server using the [Datum Client](https://github.com/datumforge/datum/blob/main/pkg/datumclient/client.go#L21). In order to use the cli, you must have a registered user with the Datum Server.
 
 ### Installation
 

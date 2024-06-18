@@ -33,7 +33,6 @@ func init() {
 }
 
 func createWorkspace(ctx context.Context) error {
-	fmt.Println(datumcloud.Config.String("host"))
 	c, err := datumcloud.SetupClient(ctx, datumcloud.Config.String("host"))
 	cobra.CheckErr(err)
 
