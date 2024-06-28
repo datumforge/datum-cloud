@@ -2,6 +2,7 @@ package datumseed
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/schollz/progressbar/v3"
@@ -69,6 +70,9 @@ func getAllTemplateData(ctx context.Context, c *seed.Client) error {
 	for _, template := range templates.Templates.Edges {
 		rows = append(rows, []interface{}{template.Node.ID, template.Node.Name})
 	}
+
+	// add empty row for spacing
+	fmt.Println()
 
 	createTableOutput("Templates", header, rows)
 
