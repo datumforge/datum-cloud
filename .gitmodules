@@ -1,0 +1,3 @@
+[submodule "internal/seed/templates"]
+	path = internal/seed/templates
+	url = https://github.com/datumforge/jsonschema-templates.git

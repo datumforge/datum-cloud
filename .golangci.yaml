@@ -40,4 +40,5 @@ issues:
     - .buildkite/*
     - .github/*
     - docker/*
+    - internal/seed/jsonschema/templates/*
   exclude-files: []

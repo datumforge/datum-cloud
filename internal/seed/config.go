@@ -22,6 +22,8 @@ type Config struct {
 	NumInvites int `json:"NumInvites" koanf:"NumInvites" default:"5"`
 	// NumSubscribers is the number of subscribers to generate
 	NumSubscribers int `json:"NumSubscribers" koanf:"NumSubscribers" default:"30"`
+	// GenerateTemplates is a flag to generate templates
+	GenerateTemplates bool `json:"generateTemplates" koanf:"generateTemplates" default:"true"`
 }
 
 // NewDefaultConfig returns a new Config with default values

@@ -15,6 +15,11 @@ tasks:
     cmds:
       - go run cmd/cli/main.go seed init
 
+  template:
+    desc: initialize the new seeded template data
+    cmds:
+      - go run cmd/cli/main.go seed templates
+
   seed:
     desc: create a new seeded environment
     cmds:

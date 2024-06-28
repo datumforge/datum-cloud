@@ -35,6 +35,10 @@ Thumbs.db
 demodata/*
 pat.env
 
+# Builds
+datum-cloud-cli
+datum-cloud
+
 # Configs
 *.env
 *.env-dev
