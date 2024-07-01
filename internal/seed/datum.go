@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/datumforge/datum/pkg/datumclient"
+	"github.com/datumforge/datum/pkg/enums"
 	"github.com/datumforge/datum/pkg/models"
 )
 
@@ -221,6 +222,34 @@ func (c *Client) RegisterUsers(ctx context.Context) error {
 				return err
 			}
 		}
+	}
+
+	return nil
+}
+
+// LoadTemplates loads the templates from the jsonschema/templates directory
+func (c *Client) LoadTemplates(ctx context.Context) error {
+	if !c.config.GenerateTemplates {
+		return nil
+	}
+
+	tmpls, err := getTemplates(templateDirectory)
+	if err != nil {
+		return err
+	}
+
+	input := []*datumclient.CreateTemplateInput{}
+
+	for _, t := range tmpls {
+		input = append(input, &datumclient.CreateTemplateInput{
+			Name:         t.Name,
+			Jsonconfig:   t.JSONConfig,
+			TemplateType: &enums.RootTemplate,
+		})
+	}
+
+	if _, err := c.CreateBulkTemplate(ctx, input); err != nil {
+		return err
 	}
 
 	return nil

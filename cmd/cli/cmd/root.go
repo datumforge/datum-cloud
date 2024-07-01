@@ -50,7 +50,7 @@ func init() {
 
 	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/."+appName+".yaml)")
 	RootCmd.PersistentFlags().String("host", "", "datum cloud api url, if not set the config default will be used")
-	RootCmd.PersistentFlags().String("datum-host", "", "datum api url, if not set the config default will be used")
+	RootCmd.PersistentFlags().String("datumhost", "", "datum api url, if not set the config default will be used")
 
 	// Auth flags
 	RootCmd.Flags().String("token", "", "datum api token")

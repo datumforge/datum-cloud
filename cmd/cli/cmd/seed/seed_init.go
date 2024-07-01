@@ -114,6 +114,12 @@ func initSeedData(ctx context.Context) error {
 	err = c.LoadSubscribers(ctx)
 	cobra.CheckErr(err)
 
+	bar.Describe("[light_green]>[reset] creating templates...")
+	datumcloud.BarAdd(bar, 10) //nolint:mnd
+
+	err = c.LoadTemplates(ctx)
+	cobra.CheckErr(err)
+
 	bar.Describe("[light_green]>[reset] seeded environment created")
 	err = bar.Finish()
 	cobra.CheckErr(err)
@@ -186,6 +192,18 @@ func getAllData(ctx context.Context, c *seed.Client) error {
 
 	createTableOutput("Subscribers", header, rows)
 
+	templates, err := c.GetAllTemplates(ctx)
+	cobra.CheckErr(err)
+
+	header = table.Row{"ID", "Name"}
+	rows = []table.Row{}
+
+	for _, template := range templates.Templates.Edges {
+		rows = append(rows, []interface{}{template.Node.ID, template.Node.Name})
+	}
+
+	createTableOutput("Templates", header, rows)
+
 	return nil
 }
 
@@ -204,8 +222,8 @@ func newSeedClient() (*seed.Client, error) {
 		conf.Directory = datumcloud.Config.String("directory")
 	}
 
-	if datumcloud.Config.String("datum-host") != "" {
-		conf.DatumHost = datumcloud.Config.String("datum-host")
+	if datumcloud.Config.String("datumhost") != "" {
+		conf.DatumHost = datumcloud.Config.String("datumhost")
 	}
 
 	conf.Token = datumcloud.Config.String("token")
