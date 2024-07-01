@@ -52,8 +52,8 @@ github.com/cloudwego/base64x v0.1.4/go.mod h1:0zlkT4Wn5C6NdauXdJRhSKRlJvmclQ1hhJ
 github.com/cloudwego/iasm v0.2.0 h1:1KNIy1I1H9hNNFEEH3DVnI4UujN+1zjpuk6gwHLTssg=
 github.com/cloudwego/iasm v0.2.0/go.mod h1:8rXZaNYT2n95jn+zTI1sDr+IgcD2GVs0nlbbQPiEFhY=
 github.com/cpuguy83/go-md2man/v2 v2.0.4/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
-github.com/datumforge/datum v0.6.9 h1:qcwAHQxHEJDNZNCkJwMz4gNfw+z9YNFmkw1+SQLsS8w=
-github.com/datumforge/datum v0.6.9/go.mod h1:aw4K0aO5vsHhYHjXE67d+quPVqUrBowh6yCbcfu6f9w=
+github.com/datumforge/datum v0.7.0 h1:52VYGbUluB4ppkQEos7HiVlsxCEfEAaoqTg48/TBD28=
+github.com/datumforge/datum v0.7.0/go.mod h1:H7O6On5S5Aa2soWlEhbOVuYxhMHkDJjLhjJUpcvDVds=
 github.com/datumforge/echo-prometheus/v5 v5.0.0-20240521143548-d561656e6328 h1:B33HrZsSMcvpxxDNEqRb4rNjtTIBoNFK/tozJlblBgg=
 github.com/datumforge/echo-prometheus/v5 v5.0.0-20240521143548-d561656e6328/go.mod h1:sHgjkPWIRMCfTdYIDnGiUXsBvQ5JMmuzBDThNxrWJkc=
 github.com/datumforge/echox v0.1.2 h1:NciUd8lHEShyZ7JKe25KiMw6Sqx6EysmwTcqawbvSDg=

@@ -10,8 +10,6 @@ import (
 	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 
-	"github.com/datumforge/datum/pkg/datumclient"
-
 	datumcloud "github.com/datumforge/datum-cloud/cmd/cli/cmd"
 	"github.com/datumforge/datum-cloud/internal/seed"
 )
@@ -167,7 +165,7 @@ func getAllData(ctx context.Context, c *seed.Client) error {
 
 	createTableOutput("Groups", header, rows)
 
-	invites, err := c.GetInvites(ctx)
+	invites, err := c.GetAllInvites(ctx)
 	cobra.CheckErr(err)
 
 	header = table.Row{"ID", "Recipient", "Role", "Status"}
@@ -179,8 +177,7 @@ func getAllData(ctx context.Context, c *seed.Client) error {
 
 	createTableOutput("Invites", header, rows)
 
-	where := &datumclient.SubscriberWhereInput{}
-	subscribers, err := c.Subscribers(ctx, where)
+	subscribers, err := c.GetAllSubscribers(ctx)
 	cobra.CheckErr(err)
 
 	header = table.Row{"ID", "Email", "Active", "Verified"}
