@@ -164,6 +164,20 @@ func (c *Client) LoadInvites(ctx context.Context) error {
 	return nil
 }
 
+// LoadOrgMembers loads orgs members from the user ids provided
+func (c *Client) LoadOrgMembers(ctx context.Context, userIDs []string) error {
+	for _, userID := range userIDs {
+		_, err := c.AddUserToOrgWithRole(ctx, datumclient.CreateOrgMembershipInput{
+			UserID: userID,
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // LoadSubscribers loads the subscribers from the subscribers.csv file
 func (c *Client) LoadSubscribers(ctx context.Context) error {
 	file := c.config.getSubscriberFilePath()
@@ -181,12 +195,14 @@ func (c *Client) LoadSubscribers(ctx context.Context) error {
 }
 
 // RegisterUsers registers the users from the users.csv file
-func (c *Client) RegisterUsers(ctx context.Context) error {
+func (c *Client) RegisterUsers(ctx context.Context) ([]string, error) {
+	userIDs := []string{}
+
 	file := c.config.getUserFilePath()
 
 	upload, err := loadCSVFile(file)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	reader := csv.NewReader(upload.File)
@@ -207,8 +223,10 @@ func (c *Client) RegisterUsers(ctx context.Context) error {
 
 		reply, err := c.Register(ctx, &req)
 		if err != nil {
-			return err
+			return nil, err
 		}
+
+		userIDs = append(userIDs, reply.ID)
 
 		if record[6] == "true" {
 			// sleep for a 100ms to avoid rate limiting
@@ -219,12 +237,12 @@ func (c *Client) RegisterUsers(ctx context.Context) error {
 			if _, err := c.VerifyEmail(ctx, &models.VerifyRequest{
 				Token: reply.Token,
 			}); err != nil {
-				return err
+				return nil, err
 			}
 		}
 	}
 
-	return nil
+	return userIDs, nil
 }
 
 // LoadTemplates loads the templates from the jsonschema/templates directory
