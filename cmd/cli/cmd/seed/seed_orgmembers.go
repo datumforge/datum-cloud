@@ -9,9 +9,10 @@ import (
 	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 
+	"github.com/datumforge/datum/pkg/datumclient"
+
 	datumcloud "github.com/datumforge/datum-cloud/cmd/cli/cmd"
 	"github.com/datumforge/datum-cloud/internal/seed"
-	"github.com/datumforge/datum/pkg/datumclient"
 )
 
 var seedOrgMembersCmd = &cobra.Command{
@@ -50,7 +51,8 @@ func initOrgMemberData(ctx context.Context) error {
 
 	config.NumUsers = datumcloud.Config.Int("users")
 
-	config.GenerateUserData()
+	err = config.GenerateUserData()
+	cobra.CheckErr(err)
 
 	bar := progressbar.NewOptions(100, //nolint:mnd
 		progressbar.OptionEnableColorCodes(true),
