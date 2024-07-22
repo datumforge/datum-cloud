@@ -34,3 +34,8 @@ func (c *Config) GenerateData() error {
 	// Generate the subscriber data
 	return c.generateSubscriberData()
 }
+
+func (c *Config) GenerateUserData() error {
+	// Generate the user data
+	return c.generateUserData()
+}

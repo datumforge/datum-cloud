@@ -62,7 +62,7 @@ func initSeedData(ctx context.Context) error {
 	bar.Describe("[light_green]>[reset] registering users...")
 	datumcloud.BarAdd(bar, 10) //nolint:mnd
 
-	err = c.RegisterUsers(ctx)
+	userIDs, err := c.RegisterUsers(ctx)
 	cobra.CheckErr(err)
 
 	bar.Describe("[light_green]>[reset] creating organizations...")
@@ -92,6 +92,12 @@ func initSeedData(ctx context.Context) error {
 
 	// create API Token for the root org and authorize as that token
 	err = c.GenerateSeedAPIToken(ctx, rootOrgID)
+	cobra.CheckErr(err)
+
+	bar.Describe("[light_green]>[reset] creating adding org members...")
+	datumcloud.BarAdd(bar, 10) //nolint:mnd
+
+	err = c.LoadOrgMembers(ctx, userIDs)
 	cobra.CheckErr(err)
 
 	bar.Describe("[light_green]>[reset] creating groups...")

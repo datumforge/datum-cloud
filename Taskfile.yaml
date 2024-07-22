@@ -137,10 +137,10 @@ tasks:
     desc: a task to create a personal access token and export it to the environment
     vars:
       PERSONAL_ORG:
-        sh: datum user get -z json | jq -r .users.edges.[0].node.setting.defaultOrg.id
+        sh: datum user get -z json | jq -r '.users.edges.[0].node.setting.defaultOrg.id'
     cmds:
       - touch {{.PAT_FILE}}
-      - datum pat create --name="datum-cloud-demo-env" --description="datum-cloud" -o {{.PERSONAL_ORG}} | jq -r '"DATUMCLOUD_PATID=\(.createPersonalAccessToken.personalAccessToken.id)\nDATUMCLOUD_SERVER_DATUM_TOKEN=\(.createPersonalAccessToken.personalAccessToken.token)\nDATUMCLOUD_TOKEN=\(.createPersonalAccessToken.personalAccessToken.token)"' > {{.PAT_FILE}}
+      - datum pat create --name="datum-cloud-demo-env" --description="datum-cloud" -o {{.PERSONAL_ORG}}  -z json | jq -r '"DATUMCLOUD_PATID=\(.createPersonalAccessToken.personalAccessToken.id)\nDATUMCLOUD_SERVER_DATUM_TOKEN=\(.createPersonalAccessToken.personalAccessToken.token)\nDATUMCLOUD_TOKEN=\(.createPersonalAccessToken.personalAccessToken.token)"' > {{.PAT_FILE}}
       - export $(awk -F= '{output=output" "$1"="$2} END {print output}' {{.PAT_FILE}})
 
   ## Server tasks
