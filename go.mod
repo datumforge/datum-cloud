@@ -9,7 +9,7 @@ require (
 	github.com/datumforge/echo-prometheus/v5 v5.0.0-20240521143548-d561656e6328
 	github.com/datumforge/echox v0.1.2
 	github.com/datumforge/echozap v0.0.0-20231205193458-b29cc54cd34c
-	github.com/getkin/kin-openapi v0.126.0
+	github.com/getkin/kin-openapi v0.127.0
 	github.com/invopop/jsonschema v0.12.0
 	github.com/invopop/yaml v0.3.1
 	github.com/jedib0t/go-pretty/v6 v6.5.9
